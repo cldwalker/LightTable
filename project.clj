@@ -9,13 +9,21 @@
                   :exclusions [org.apache.ant/ant]]
                  ]
   :jvm-opts ["-Xmx1g" "-XX:+UseConcMarkSweepGC"] ; cljsbuild eats memory
-  :cljsbuild {:builds [{:source-paths ["src"]
+  :cljsbuild {:builds [{:id "simple"
+                        :source-paths ["src"]
                         :compiler {:optimizations :simple
                                    :externs ["externs/jquery.js" "externs/throttle.js" "externs/codemirror.js"]
                                    :source-map "deploy/core/node_modules/lighttable/bootstrap.js.map"
                                    :output-to "deploy/core/node_modules/lighttable/bootstrap.js"
                                    :output-dir "deploy/core/node_modules/lighttable/cljs/"
-                                   :pretty-print true}}]}
+                                   :pretty-print true}}
+                       {:id "test"
+                        :source-paths ["src" "test"]
+                        :compiler {:optimizations :simple
+                                   :externs ["externs/jquery.js" "externs/throttle.js" "externs/codemirror.js"]
+                                   :output-to "target/test.js"
+                                   :output-dir "target/test-out"
+                                   :pretty-print false}}]}
   :plugins [[lein-cljsbuild "1.0.1"]]
   :source-paths ["src/"]
   )

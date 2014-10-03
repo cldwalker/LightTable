@@ -8,14 +8,27 @@
                  [org.clojure/clojurescript "0.0-2138"
                   :exclusions [org.apache.ant/ant]]
                  ]
+
+  :profiles {:dev {:plugins [[com.cemerick/clojurescript.test "0.3.1"]]}}
+
   :jvm-opts ["-Xmx1g" "-XX:+UseConcMarkSweepGC"] ; cljsbuild eats memory
-  :cljsbuild {:builds [{:source-paths ["src"]
+  :cljsbuild {:builds [{:id "simple"
+                        :source-paths ["src"]
                         :compiler {:optimizations :simple
                                    :externs ["externs/jquery.js" "externs/throttle.js" "externs/codemirror.js"]
                                    :source-map "deploy/core/node_modules/lighttable/bootstrap.js.map"
                                    :output-to "deploy/core/node_modules/lighttable/bootstrap.js"
                                    :output-dir "deploy/core/node_modules/lighttable/cljs/"
-                                   :pretty-print true}}]}
+                                   :pretty-print true}}
+                        {:id "test"
+                         :source-paths ["src" "test"]
+                         :compiler {:optimizations :simple
+                                    :externs ["externs/jquery.js" "externs/throttle.js" "externs/codemirror.js"]
+                                    :output-to "target/cljs-test.js"
+                                    :output-dir "target/out-cljs-test"
+                                    :pretty-print true}}]
+              :test-commands {"test" ["phantomjs" :runner
+                                      "target/cljs-test.js"]}}
   :plugins [[lein-cljsbuild "1.0.1"]]
   :source-paths ["src/"]
   )

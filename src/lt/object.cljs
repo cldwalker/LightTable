@@ -89,8 +89,6 @@
                          e
                          (.-stack e)))))
 
-(declare raise)
-
 (defn raise*
   ([obj reactions args] (raise* obj reactions args nil))
   ([obj reactions args trigger]

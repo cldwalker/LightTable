@@ -1,4 +1,8 @@
 language: clojure
-
+lein: lein
+script: lein cljsbuild once | grep WARNING:
+jdk:
+- oraclejdk8
 notifications:
-    - email: false
+  recipients:
+  - gabriel.horner@gmail.com

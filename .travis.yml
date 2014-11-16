@@ -1,6 +1,6 @@
 language: clojure
 lein: lein
-script: "lein cljsbuild once | grep -v WARNING:"
+script: "! lein cljsbuild once 2>&1 | grep WARNING:"
 jdk:
 - oraclejdk8
 notifications:

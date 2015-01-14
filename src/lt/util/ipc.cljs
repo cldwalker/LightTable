@@ -12,3 +12,15 @@
   "Delegates to ipc.on which defines a callback to fire for the given channel."
   [channel cb]
   (.on ipc channel cb))
+
+;; Only for debugging ipc messages sent and received
+(when (aget js/process.env "IPC_DEBUG")
+  (let [old-send send
+        old-on on]
+    (def send (fn [& args]
+                (prn "CLIENT->" args)
+                (apply old-send args)))
+    (def on (fn [channel cb]
+              (old-on channel (fn [& args]
+                                (prn "->CLIENT" channel args)
+                                (apply cb args)))))))

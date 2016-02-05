@@ -722,12 +722,19 @@
                         (load/js (str "core/node_modules/codemirror/addon/fold/" file) :sync))
                       (load/css "node_modules/codemirror/addon/fold/foldgutter.css")
                       (load/js "core/node_modules/codemirror/keymap/sublime.js" :sync)
+
+                      (load/js "core/node_modules/codemirror/addon/mode/simple.js" :sync)
+                      ;; (load/js "core/node_modules/codemirror/mode/css/css.js" :sync)
+                      ;; (load/js "core/node_modules/codemirror/mode/javascript/javascript.js" :sync)
+                      ;; (load/js "core/node_modules/codemirror/mode/xml/xml.js" :sync)
+                      ;; (load/js "core/node_modules/codemirror/mode/htmlmixed/htmlmixed.js" :sync)
                       (doseq [path (files/filter-walk #(and (= (files/ext %) "js")
                                                             (not (some (fn [m] (> (.indexOf % (str "core/node_modules/codemirror/mode/" m "/")) -1))
                                                                        mode-blacklist))
                                                             ;; Remove test files
                                                             (not (.endsWith % "test.js")))
                                                       (files/lt-home "core/node_modules/codemirror/mode"))]
+                        (prn :LOAD path)
                         (load/js path :sync))
                       (aset js/CodeMirror.keyMap.basic "Tab" expand-tab)))
 

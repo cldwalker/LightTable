@@ -113,6 +113,7 @@
 
 (defn capture [key char ev]
   (activity)
+  (prn :capture key)
   (binding [*capture* true
             *stop* false]
     (when-let [cs (chord|mapping key char ev)]
@@ -123,6 +124,7 @@
       *capture*)))
 
 (defn capture-up [key char ev]
+  (prn :capture-up key)
   (or (@key-map char) (@key-map (->keystr key ev))))
 
 (def meta (if (platform/mac?)

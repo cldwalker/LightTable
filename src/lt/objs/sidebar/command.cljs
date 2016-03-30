@@ -154,6 +154,7 @@
 (behavior ::change!
           :triggers #{:change!}
           :reaction (fn [this v]
+                      ;; (def fl this)
                       (let [v (object/raise-reduce this :change+ v)]
                         (when-not (= (:search @this) v)
                           (object/merge! this {:selected 0
@@ -219,7 +220,13 @@
 (behavior ::update-lis
           :triggers #{:refresh!}
           :reaction (fn [this]
+                      (prn :refresh! (:search @this))
+                      ;; (-> @fl :items deref first)
+                      (.time js/console "indexed-results")
+                      (.profile js/console "indexed-results")
                       (object/merge! this {:cur (indexed-results @this)})
+                      (.profileEnd js/console "indexed-results")
+                      (.timeEnd js/console "indexed-results")
                       (fill-lis @this
                                 (:cur @this))))
 
@@ -247,6 +254,7 @@
 (defn score-sort2 [x y]
   (- (.-score (aget y 4)) (.-score (aget x 4))))
 
+;; (def items (apply array (->items (:items @fl))))
 (defn indexed-results [{:keys [search size items key size]}]
   (let [items (apply array (->items items))
         map-func3 #(array % (key %) (js/fastScore (key %) search) nil nil)
@@ -255,6 +263,7 @@
         has-score #(> (.-score (aget % 4)) 0)]
     (if-not (empty? search)
       (let [score0 (.. items (map map-func3) (filter #(aget % 2)))
+            _ (prn "score0" (first score0))
             score1 (.. score0  (map map-func) (sort score-sort))
             score2 (.. score1 (slice 0 50) (map map-func2) (filter has-score) (sort score-sort2))]
         score2)
